@@ -1,0 +1,24 @@
+Install java 1.8
+sudo yum install java-1.8.0-openjdk.x86_64
+Bash
+After the installation, you can confirm it by running the following command:
+
+java -version
+Bash
+This command will tell you about the Java runtime environment that you have installed:
+
+openjdk version "1.8.0_91"
+OpenJDK Runtime Environment (build 1.8.0_91-b14)
+OpenJDK 64-Bit Server VM (build 25.91-b14, mixed mode)
+Bash
+In order to help Java-based applications locate the Java virtual machine properly, you need to set two environment variables: JAVAHOME and JREHOME.
+
+sudo cp /etc/profile /etc/profile_backup
+echo 'export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk' | sudo tee -a /etc/profile
+echo 'export JRE_HOME=/usr/lib/jvm/jre' | sudo tee -a /etc/profile
+source /etc/profile
+Bash
+Finally, you can print them for review:
+
+echo $JAVA_HOME
+echo $JRE_HOME
