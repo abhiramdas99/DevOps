@@ -1,0 +1,29 @@
+INSTALL JENKINS
+
+Go to https://pkg.jenkins.io/redhat-stable/
+
+and copy these commands
+
+ # sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+ # sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    
+    yum install epel-release # repository that provides 'daemonize'
+    
+    sudo amazon-linux-extras install epel
+
+  yum install jenkins
+  
+ # systemctl start jenkins
+ # systemctl status jenkins
+ # clear
+ 
+ open browser, my case http://15.206.70.134:8080 .
+ if its not open need to allow the port number in   network security group  inbund rule 
+ 
+ To see the password follow the command - 
+ # cat /var/lib/jenkins/secrets/initialAdminPassword 
+ Read the password and paste in browser access key inputbox
+
+Click on install plugins
+Give username and password details
+Jenkisn is ready to use
