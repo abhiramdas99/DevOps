@@ -1,0 +1,9 @@
+create new instance
+allow port number 80 (http), 8080(jenkins)
+download the *.pem file and store in proper location in mycase its in  C:\cloud_access_key
+open puttygen > load  pem file > save private key. in mycase  C:\cloud_access_key\pccas_aws_access_key_pair.pem (pem file ), C:\cloud_access_key\pccas_aws_access_key_pair.ppk
+open git bash command prompt > got to the foleder, my case  c:\cloud_access_key
+point to EC2> Instances >i-04###### > Connect to instance > ssh client > copy the example string and past to git bash folder 
+$pwd   //to see the  current path 
+$sudo su-    //get the root permission 
+$yum update -y  // Keep upto date the ec2 instance 
