@@ -1,0 +1,15 @@
+To check java is install or not in EC2
+$alternatives --config java
+
+$sudo yum update -y
+$sudo install java-1.8.0-openjdk-devel
+$alternaties --config java  get the path and copy the path like below 
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-1.amzn2.0.1.x86_64
+enter 1 
+vim /etc/profile
+i
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.265.b01-1.amzn2.0.1.x86_64
+export PATH=$JAVA_HOME/bin:$PATH
+ESC :wq!
+#source /etc/profile
+echo $JAVA_HOME
