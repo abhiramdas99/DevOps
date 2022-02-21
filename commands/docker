@@ -1,0 +1,11 @@
+>>> how to check docker services is running or not
+#systemctl status docker
+
+>>> how to start/ stop the docker 
+#systemctl start docker , # systemctl stop docker 
+
+>>> how to see the list of container and status 
+#docker ps -a 
+
+>>> how to create your own image  from a container
+#docker commit [container_name] [new_image_name]:[tag_name]
