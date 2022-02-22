@@ -9,3 +9,26 @@
 
 >>> how to create your own image  from a container
 #docker commit [container_name] [new_image_name]:[tag_name]
+
+>>> how delete all container 
+# docker system prune --all
+
+>>  How to create simple docker file 
+vim dockerfile
+FROM centos:7
+MAINTAINER abhi 
+RUN yum -y update 
+RUN yum install git -y 
+VOLUME /data  
+[Esc] > :wq!
+
+>>> create image from the docker file 
+docker build -t mycentos:03 . 
+-t = tagname   
+. = present directory 
+
+>> run the image  to run the container
+# docker run -it --name myc1 mycentos:03
+
+>> how to see the current user running name 
+# uname
