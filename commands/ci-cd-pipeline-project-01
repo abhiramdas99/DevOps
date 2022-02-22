@@ -1,0 +1,48 @@
+project detail - a simple   java and maven based project  
+=========================================================
+
+process flow -
+--------------
+[ready master machine]===>[Git src code (java /maven)] ===> [compile .java class file] ===>[codeReview pmd ] ===> [test] ===> [code coverage] ===> [package] ===> [deploy in container docker ]
+
+
+[ready master machine]
+--------------------------------------------------------
+>>> where you can see the jenkins password if you forget 
+# cd /var/lib/jenkins/users
+# cat user.xml 
+use the initial string for password and user id in jenkins
+
+>>> Install maven 
+# yum install maven -y
+
+>>> check version 
+# maven --version  
+
+>>> check the maven environmental variable other setting , if not set need to set it 
+# vim /etc/profile . 
+Then  goto , keyword export , then enter the following line
+export MAVEN_HOME=/usr/share/maven
+
+>>> cross check the profile is successfully update or not 
+# source /etc/profile  
+if result is blank then everything is fine there is no error
+
+#echo $MAVEN_HOME
+/user/share/maven
+
+>>> Now the time pull or clone your project from the git repo
+#git clone [project.git]
+#git pull 
+
+go to the project folder  for compile 
+# mvn compile 
+
+then make the package 
+#mvn package
+
+
+
+
+
+>>> Git src code (java/ maven)
