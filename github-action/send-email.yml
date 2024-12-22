@@ -1,0 +1,94 @@
+name: send email
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          
+      - name: Send Email Notification
+        if: always()
+        uses: hilarion5/send-mail@v1
+        with:
+          smtp-server: ${{ secrets.MAIL_HOST }}
+          smtp-port: ${{ secrets.MAIL_PORT }}
+          smtp-secure: false
+          from-email: ${{ secrets.MAIL_FROM_ADDRESS }}
+          to-email: ${{ secrets.MAIL_TO_ADDRESS }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: Bomann-API Deployment Notification
+          html: |
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                        color: #444444 !important;
+                    }
+                    .container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        padding: 20px;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    }
+                    .header {
+                        background-color: #f26628;
+                        color: #fff;
+                        padding: 10px;
+                        text-align: center;
+                        border-radius: 20px 20px 0px 0px;
+                    }
+                    .content {
+                        padding: 20px;
+                    }
+                    .content p {
+                        margin: 0 0 10px;
+                        color: #444444 !important;
+                    }
+                    .footer {
+                        background-color: #f1f1f1;
+                        padding: 10px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #777777;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h2>Bomann-API Deployment Notification</h2>
+                    </div>
+                    <div class="content">
+                        <p><strong>Run ID:</strong> ${{ github.run_number }}</p>
+                        <p><strong>Deployment to staging branch was:</strong> ${{ github.event_name }}</p>
+                        <p><strong>Deployment Status:</strong> <b> started </b></p>
+                        <p><strong>Committed by:</strong> ${{ github.actor }}</p>
+                        <p><strong>Commit Message:</strong> ${{ github.event.head_commit.message }}</p>
+                    </div>
+                    <div class="footer">
+                        <p>API CI/CD Pipeline / deployment started</p>
+                    </div>
+                </div>
+            </body>
+            </html>
