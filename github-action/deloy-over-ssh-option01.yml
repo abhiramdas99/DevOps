@@ -1,0 +1,45 @@
+name: php CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - staging
+env:
+  STAGING_PORT="22"  # ssh port no
+  STAGING_HOST="xxx.xxx.xxx.xxx" # host ip 
+  STAGING_USERNAME="ubuntu"  # login user 
+  STAGING_PATH="/home/ubuntu/app_root_dir" # application root path 
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Backup current commit hash
+         run: |
+           ssh -o StrictHostKeyChecking=no -p ${{ env.STAGING_PORT }} ${{ env.STAGING_USERNAME }}@${{ env.STAGING_HOST }} "cd ${{ env.STAGING_PATH }} && sudo sh -c 'git rev-parse HEAD > current_commit.txt'"
+      
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.STAGING_PORT }} ${{ secrets.STAGING_USERNAME }}@${{ secrets.STAGING_HOST }} "cd ${{ secrets.STAGING_PATH }} && sudo git add ."
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.STAGING_PORT }} ${{ secrets.STAGING_USERNAME }}@${{ secrets.STAGING_HOST }} "cd ${{ secrets.STAGING_PATH }} && sudo git stash"
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.STAGING_PORT }} ${{ secrets.STAGING_USERNAME }}@${{ secrets.STAGING_HOST }} "cd ${{ secrets.STAGING_PATH }} && sudo git pull origin staging"
+      
+      - name: Revert to previous working code on failure
+        if: failure()
+        run: |
+          # Get the commit hash from the file
+          CURRENT_COMMIT_HASH=$(ssh -o StrictHostKeyChecking=no -p ${{ secrets.STAGING_PORT }} ${{ secrets.STAGING_USERNAME }}@${{ secrets.STAGING_HOST }} "cat ${{ secrets.STAGING_PATH }}/current_commit.txt")
+          # Revert to the previous commit
+          echo "Reverting to the previous commit: $CURRENT_COMMIT_HASH"
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.STAGING_PORT }} ${{ secrets.STAGING_USERNAME }}@${{ secrets.STAGING_HOST }} "cd ${{ secrets.STAGING_PATH }} && git reset --hard $CURRENT_COMMIT_HASH"
+
+
+          
